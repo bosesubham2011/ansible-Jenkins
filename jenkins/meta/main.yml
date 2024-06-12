@@ -1,0 +1,25 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: jenkins
+  author: bosesubham-2011
+  description: ansible-jenkins
+  company: "america"
+  license: "america"
+  min_ansible_version: "2.10"
+  platforms:
+    - name: Fedora
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - development
+    - packaging
+    - jenkins
+    - ci

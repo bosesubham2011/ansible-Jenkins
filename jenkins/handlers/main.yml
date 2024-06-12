@@ -1,0 +1,16 @@
+---
+#region restart jenkins
+- name: restart jenkins
+  service: name=jenkins state=restarted
+#endregion
+
+#region configure default users
+- name: configure default users
+  template:
+    src: basic-security.groovy.j2
+    dest: "{{ jenkins_home }}/init.groovy.d/basic-security.groovy"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
+    mode: 0775
+  register: jenkins_users_config
+#endregion

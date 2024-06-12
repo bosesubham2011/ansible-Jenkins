@@ -1,39 +1,47 @@
 ---
 
 #region install dependencies
-- name: Ensure dependencies are installed.
+- name: ensure dependencies are installed
   package:
     name:
       - curl
       - initscripts
       - "{{ 'libselinux-python' if ansible_python['version']['major'] < 3 else 'python3-libselinux' }}"
     state: present
+#endregion
 
-- name: Ensure Jenkins repo is installed.
+#region install jenkins repo
+- name: ensure jenkins repo is installed
   get_url:
     url: "{{ jenkins_repo_url }}"
     dest: /etc/yum.repos.d/jenkins.repo
   when: jenkins_repo_url | default(false)
+#endregion
 
-- name: Add Jenkins repo GPG key.
+#region add jenkins repo key
+- name: add jenkins repo GPG key
   rpm_key:
     state: present
     key: "{{ jenkins_repo_key_url }}"
   when: jenkins_repo_url | default(false)
+#endregion
 
-- name: Download specific Jenkins version.
+#region download jenkins
+- name: download specific jenkins version
   get_url:
     url: "{{ jenkins_pkg_url }}/jenkins-{{ jenkins_version }}-1.1.noarch.rpm"
     dest: "/tmp/jenkins-{{ jenkins_version }}-1.1.noarch.rpm"
   when: jenkins_version is defined
 
-- name: Check if we downloaded a specific version of Jenkins.
+- name: check if we downloaded a specific version of jenkins
   stat:
     path: "/tmp/jenkins-{{ jenkins_version }}-1.1.noarch.rpm"
   register: specific_version
   when: jenkins_version is defined
+#endregion
 
-- name: Install our specific version of Jenkins.
+#region install jenkins
+- name: install our specific version of jenkins
   package:
     name: "/tmp/jenkins-{{ jenkins_version }}-1.1.noarch.rpm"
     state: present
@@ -45,3 +53,4 @@
     name: jenkins
     state: "{{ jenkins_package_state }}"
   notify: configure default users
+#endregion
